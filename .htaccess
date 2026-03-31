@@ -1,0 +1,38 @@
+# อาภรณ์แก้ว — Hosting Configuration (.htaccess)
+
+# Enable URL rewriting
+RewriteEngine On
+
+# Protect config files
+<FilesMatch "^(config\.php)$">
+  Order deny,allow
+  Deny from all
+</FilesMatch>
+
+# Protect includes directory
+<IfModule mod_rewrite.c>
+  RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# Protect SQL file
+<FilesMatch "\.(sql)$">
+  Order deny,allow
+  Deny from all
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# PHP settings
+<IfModule mod_php.c>
+  php_value upload_max_filesize 10M
+  php_value post_max_size 10M
+  php_value max_execution_time 30
+</IfModule>
+
+# Default charset
+AddDefaultCharset UTF-8
